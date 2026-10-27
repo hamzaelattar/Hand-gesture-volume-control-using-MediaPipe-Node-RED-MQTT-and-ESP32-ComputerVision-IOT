@@ -1,0 +1,117 @@
+[
+    {
+        "id": "2fa4756690cfeff9",
+        "type": "tab",
+        "label": "INK",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "02eff44b4f54388e",
+        "type": "mqtt in",
+        "z": "2fa4756690cfeff9",
+        "name": "",
+        "topic": "hand/distance",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "b9ceb4074de909f8",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 350,
+        "y": 320,
+        "wires": [
+            [
+                "e3c0327e56be9bbf"
+            ]
+        ]
+    },
+    {
+        "id": "e3c0327e56be9bbf",
+        "type": "function",
+        "z": "2fa4756690cfeff9",
+        "name": "Distance to Volume",
+        "func": "\nlet distance = Number(msg.payload);\n\nif (!Number.isFinite(distance)) {\n    return null;\n}\n\n// Seuils de distance\nlet minDistance = 20;\nlet maxDistance = 180;\n\n// Limiter la distance\ndistance = Math.max(minDistance, Math.min(maxDistance, distance));\n\n// Convertir en pourcentage\nlet volume = ((distance - minDistance) /\n              (maxDistance - minDistance)) * 100;\n\n// Arrondir entre 0 et 100\nmsg.payload = Math.round(volume);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 200,
+        "wires": [
+            [
+                "f0b652e2293229ea",
+                "629163d0c7dc92d4"
+            ]
+        ]
+    },
+    {
+        "id": "f0b652e2293229ea",
+        "type": "mqtt out",
+        "z": "2fa4756690cfeff9",
+        "name": "",
+        "topic": "hand/volume",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "b9ceb4074de909f8",
+        "x": 630,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "629163d0c7dc92d4",
+        "type": "debug",
+        "z": "2fa4756690cfeff9",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "b9ceb4074de909f8",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
